@@ -42,7 +42,7 @@ function setup(){
     //ctx.fillText("your score atual: " + player.score, 740, 50);
     //ctx.fillText("your dif atual: " + (50-dif), 740, 100);
 
-    },90)
+    },60)
 };
 
 setup();

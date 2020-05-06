@@ -15,67 +15,76 @@ function Snake()
     this.list_letter = [];
     this.list_letter = [];
     this.state = "";
+    this.cnt_n_dummy = 0;
+    this.state_saved = "";
+    this.state_saved_mine = "";
 
     this.draw =  function(dif)
     {
-        //console.log("!!entrou no draw!!");
-        this.ori = this.orient_prev;
+        //this.ori = this.orient_prev;
+        ////console.log("valor de ori antes: " + this.ori);
+
         if(this.orient != this.orient_prev)
         {
+            state_saved_mine = this.orient_prev;
+            ////console.log("state_saved_mine: " + this.state_saved_mine);
             this.orient_prev = this.orient;
+            ////console.log("valor de ori depois: " + this.orient_prev);
             this.list_letter.unshift(this.orient);
-            //////console.log("mudou!: acrescentou " + this.list_letter[0])
         }
         else
         {
             this.list_letter.unshift("dummy");
-            //////console.log("acrescentou dummy " + this.list_letter[0])
         }
         
         var x_now = this.x;
         var y_now = this.y;
+        var quebra = 0;
+        state_saved = "";
+        cnt_n_dummy = 0;
 
         for(i = 0 ; i < dif ; i++)
             {
-                //console.log("##########################" + i);
-                ////console.log("x_now: " + x_now  );
-                ////console.log("y_now: " + y_now);
                 
-                for(j = 0 ; j < dif ; j++)
-                {
-                    //console.log("elemento: " + j + " da array: " + this.list_letter[j]);
-                }
+                quebra = quebra + 1;
 
                 if(i == 0)
                 {
                     ctx.fillStyle = "#FFFFFF";
                     ctx.fillRect(this.x, this.y, 30,30);
                     state = this.orient;
-                    ////console.log("coordenada do primeiro da lst: " + this.list_letter[i]);
-                    //////console.log("coordenada de x: " + this.x);
-                    //////console.log("coordenada de y: " + this.y);
+                    if(this.list_letter[0] != "dummy")
+                    {
+                        cnt_n_dummy = cnt_n_dummy + 1;
+                    }
                 }
                 else
                 {
                     //tenho de alterar isto!!
                     if(this.list_letter[i] == "dummy")
                     {
-                        if(i == 2)
+
+                        if(this.list_letter[i-1] != "dummy")
                         {
-                            if(this.list_letter[0] != "dummy")
+                            for(j = i ; j < this.list_letter.length ; j++)
                             {
-                            state = this.ori;
-                            console.log("!!!!!!!!!!!!!!entrei na condição do 2º!!!!!!!!!!!!!!!!!! + previ state: "  + this.state);
-                            }
+
+                                if(this.list_letter[j] != "dummy")
+                                {
+                                    state = this.list_letter[j];
+                                    break;
+                                }
+                            }   
                         }
 
                         if(state == "Right")
                         {
+                            //console.log("entrou no right")
                             x_now = (x_now - 30);
                             //y_now = y_now;
                             ctx.fillStyle = "#FFFFFF";
                             ctx.fillRect(x_now, y_now, 30,30);
-                            //////console.log("array: " + this.list_letter[i]);
+                            //console.log("array: " + this.list_letter[i]);
                             //break;;
                         }
                         if(state == "Left")
@@ -84,7 +93,7 @@ function Snake()
                             //y_now = y_now;
                             ctx.fillStyle = "#FFFFFF";
                             ctx.fillRect(x_now, y_now, 30,30);
-                            //////console.log("array: " + this.list_letter[i]);
+                            //console.log("array: " + this.list_letter[i]);
                             //break;;
                         } 
                         if(state == "Up")
@@ -93,9 +102,9 @@ function Snake()
                             y_now = (y_now + 30);
                             ctx.fillStyle = "#FFFFFF";
                             ctx.fillRect(x_now, y_now, 30,30);
-                            ////console.log("entrou no up caixote nº " + (i+1));
-                            ////console.log("coordenada de x: " + this.x_now);
-                            ////console.log("coordenada de y: " + this.y_now);
+                            //console.log("entrou no up caixote nº " + (i+1));
+                            //console.log("coordenada de x: " + this.x_now);
+                            //console.log("coordenada de y: " + this.y_now);
                             //break;;
                         } 
                         if(state == "Down")
@@ -104,21 +113,23 @@ function Snake()
                             y_now = (y_now - 30);
                             ctx.fillStyle = "#FFFFFF";
                             ctx.fillRect(x_now, y_now, 30,30);
-                            //////console.log("array: " + this.list_letter[i]);
+                            //////////console.log("array: " + this.list_letter[i]);
                             //break;
                         } 
-                        //console.log("posição: " + i + " entrou no dummy");
-                        //console.log("x_now: " + x_now + " y_now: " + y_now);
+                        //////console.log("posição: " + i + " entrou no dummy");
+                        //////console.log("x_now: " + x_now + " y_now: " + y_now);
 
                         if(i == 1 || i == 2)
                         {
-                            console.log("para a posição " + i);
-                            console.log("x: " + x_now + " y: " + y_now);
+                            ////console.log("para a posição " + i);
+                            ////console.log("x: " + x_now + " y: " + y_now);
                         }
                     }
                     else
                     {
                         state = this.list_letter[i];
+                        
+                        this.cnt_n_dummy = this.cnt_n_dummy + 1;
 
                         if(state == "Right")
                         {
@@ -140,12 +151,12 @@ function Snake()
                         {
                             //x_now = x_now + 30;
                             y_now = (y_now + 30);
-                            //console.log("entrou no UP do n dummy: com valor y: " + this.y);
-                            //console.log("entrou no UP do n dummy: com valor y_now: " + y_now);
+                            //////console.log("entrou no UP do n dummy: com valor y: " + this.y);
+                            //////console.log("entrou no UP do n dummy: com valor y_now: " + y_now);
                             ctx.fillStyle = "#FFFFFF";
                             ctx.fillRect(x_now, y_now, 30,30);
-                            ////console.log("y_now final: " + y_now);
-                            ////console.log("x_now final: " + x_now);
+                            ////////console.log("y_now final: " + y_now);
+                            ////////console.log("x_now final: " + x_now);
                             //break;;
                         } 
                         if(state == "Down")
@@ -154,11 +165,11 @@ function Snake()
                             y_now = (y_now - 30);
                             ctx.fillStyle = "#FFFFFF";
                             ctx.fillRect(x_now, y_now, 30,30);
-                            //////console.log("array: " + this.list_letter[i]);
+                            //////////console.log("array: " + this.list_letter[i]);
                             //break;;
                         } 
-                        //console.log("posição: " + i + " entrou no não dummy");
-                        //console.log("x_now: " + x_now + " y_now: " + y_now);
+                        //////console.log("posição: " + i + " entrou no não dummy");
+                        //////console.log("x_now: " + x_now + " y_now: " + y_now);
 
 
                         
@@ -196,7 +207,7 @@ function Snake()
             alert("This alert will never be shown.");
         }
 
-        //////console.log(this.y);
+        //////////console.log(this.y);
     }
 
 
